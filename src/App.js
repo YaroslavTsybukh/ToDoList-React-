@@ -1,7 +1,15 @@
-function App() {
+import { Container } from '@mui/material'
+import FormInput from "./components/Form";
+import ListItems from "./components/ListItems";
+
+const App = () => {
   return (
     <div className="App">
-      <p>flsjfksdjfl</p>
+        <Container maxWidth="sm">
+            <h1>ToDo List</h1>
+            <FormInput />
+            <ListItems />
+        </Container>
     </div>
   );
 }
