@@ -1,22 +1,17 @@
-import {useState} from "react";
-
 export const useHttp = () => {
-    const [process , setProcess] = useState("loading")
+    const request = async (url , method = "GET" , body= null , headers = {"Content-Type": "application/json"} , ) => {
 
-    const request = async (url , method = "GET" , headers = {"Content-Type": "application/json"} , body= null) => {
-        setProcess("loading")
         try{
-            const response = await fetch(url , {method , headers , body})
+            const response = await fetch(url , {method , body , headers })
             if(response.ok){
                 return await response.json()
             }else{
                 throw new Error("Что-то пошло нет")
             }
         }catch(e){
-            setProcess("error")
             throw e
         }
     }
 
-    return {request , process , setProcess}
+    return {request}
 }
