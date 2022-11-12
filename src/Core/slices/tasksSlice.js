@@ -19,6 +19,22 @@ export const addTask = createAsyncThunk(
     }
 )
 
+export const deleteTask = createAsyncThunk(
+    "tasks/deletingTask",
+    ({id , request} , {fulfillWithValue}) => {
+        request(`http://localhost:3001/tasks/${id}`, "DELETE")
+        return fulfillWithValue(id)
+    }
+)
+
+export const toggleTask = createAsyncThunk(
+    "tasks/togglingTask",
+    ({id, request} , {fulfillWithValue}) => {
+        request(`http://localhost:3001/tasks/${id}` , "PATCH")
+        return fulfillWithValue(id)
+    }
+)
+
 const setLoadingProcess = (state) => {
     state.isLoading = true
 }
@@ -44,6 +60,20 @@ const taskSlice = createSlice({
                 state.tasks.push(action.payload)
             })
             .addCase(addTask.rejected , setErrorMessage)
+            .addCase(deleteTask.pending , setLoadingProcess)
+            .addCase(deleteTask.fulfilled , (state , action) => {
+                console.log(action.payload)
+                state.isLoading = false
+                state.tasks = state.tasks.filter(task => task.id !== action.payload )
+            })
+            .addCase(deleteTask.rejected , setErrorMessage)
+            // .addCase(toggleTask.pending , setLoadingProcess)
+            .addCase(toggleTask.fulfilled , (state , action) => {
+                state.isLoading = false
+                const necessaryTask = state.tasks.find(task => task.id === action.payload)
+                necessaryTask.status = !necessaryTask.status
+            })
+            .addCase(toggleTask.rejected , setErrorMessage)
     }
 })
 

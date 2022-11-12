@@ -9,7 +9,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 const FormInput = () => {
     const dispatch = useDispatch()
-    const request = useHttp()
+    const {request} = useHttp()
 
     const onSubmitTask = (data) => {
         dispatch(addTask({data , request}))
@@ -20,9 +20,12 @@ const FormInput = () => {
             initialValues={{
                 id: uuidv4(),
                 title: "",
-                completed: false
+                status: false
             }}
-            onSubmit={(values) => onSubmitTask(values) }>
+            onSubmit={(values , {resetForm}) => {
+                onSubmitTask(values)
+                resetForm()
+            }}>
             <Form style={{display: 'flex',
                     flexDirection : 'column'}}>
                 <Field id="password-input"
