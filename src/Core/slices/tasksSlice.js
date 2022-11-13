@@ -29,8 +29,9 @@ export const deleteTask = createAsyncThunk(
 
 export const toggleTask = createAsyncThunk(
     "tasks/togglingTask",
-    ({id, request} , {fulfillWithValue}) => {
-        request(`http://localhost:3001/tasks/${id}` , "PATCH")
+    ({id, request , status} , {fulfillWithValue}) => {
+        const statusTask = !status
+        request(`http://localhost:3001/tasks/${id}` , "PATCH" , JSON.stringify({status : statusTask}))
         return fulfillWithValue(id)
     }
 )

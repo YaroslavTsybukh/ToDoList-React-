@@ -31,7 +31,7 @@ const ListItems = () => {
     return(
         <Box>
             {data.map(info => (
-                <ListItem key={info.id} data={info} onDeleteTask={() => onDeleteTask(info.id)} status={info.status}/>
+                <ListItem key={info.id} data={info} onDeleteTask={() => onDeleteTask(info.id)}/>
             ))}
         </Box>
     )
