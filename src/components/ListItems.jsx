@@ -24,15 +24,28 @@ const ListItems = () => {
         dispatch(deleteTask({id , request}))
     }
 
+    const filteredTasks = (tasks) => {
+        const completedTasks = tasks.filter(task => task.status === true)
+        const incompletedTasks = tasks.filter(task => task.status === false)
+        const newArray = [...incompletedTasks , ...completedTasks]
+        console.log(newArray)
+        if(newArray.length > 0){
+            return newArray.map(info => (
+                <ListItem key={info.id} data={info} onDeleteTask={() => onDeleteTask(info.id)}/>
+            ))
+        }else{
+            return <h1 style={{textAlign: "center"}}>Задач нет</h1>
+        }
+    }
+
     if(statusLoading === true){
         return <Spinner />
     }
 
+    const elements = filteredTasks(data)
     return(
         <Box>
-            {data.map(info => (
-                <ListItem key={info.id} data={info} onDeleteTask={() => onDeleteTask(info.id)}/>
-            ))}
+            {elements}
         </Box>
     )
 }

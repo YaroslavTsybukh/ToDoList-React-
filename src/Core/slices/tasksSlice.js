@@ -1,4 +1,4 @@
-import {createSlice , createAsyncThunk , current} from "@reduxjs/toolkit"
+import {createSlice , createAsyncThunk} from "@reduxjs/toolkit"
 
 const initialState = {
     tasks: [],
@@ -30,8 +30,7 @@ export const deleteTask = createAsyncThunk(
 export const toggleTask = createAsyncThunk(
     "tasks/togglingTask",
     ({id, request , status} , {fulfillWithValue}) => {
-        const statusTask = !status
-        request(`http://localhost:3001/tasks/${id}` , "PATCH" , JSON.stringify({status : statusTask}))
+        request(`http://localhost:3001/tasks/${id}` , "PATCH" , JSON.stringify({status : !status}))
         return fulfillWithValue(id)
     }
 )
@@ -63,12 +62,10 @@ const taskSlice = createSlice({
             .addCase(addTask.rejected , setErrorMessage)
             .addCase(deleteTask.pending , setLoadingProcess)
             .addCase(deleteTask.fulfilled , (state , action) => {
-                console.log(action.payload)
                 state.isLoading = false
                 state.tasks = state.tasks.filter(task => task.id !== action.payload )
             })
             .addCase(deleteTask.rejected , setErrorMessage)
-            // .addCase(toggleTask.pending , setLoadingProcess)
             .addCase(toggleTask.fulfilled , (state , action) => {
                 state.isLoading = false
                 const necessaryTask = state.tasks.find(task => task.id === action.payload)
